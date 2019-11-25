@@ -24,21 +24,6 @@ class Quoridor:
     
         
         """
-        Initialiser une partie de Quoridor avec les joueurs et les murs spécifiés, 
-        en s'assurant de faire une copie profonde de tout ce qui a besoin d'être copié.
-
-        :param joueurs: un itérable de deux joueurs dont le premier est toujours celui qui 
-        débute la partie. Un joueur est soit une chaîne de caractères soit un dictionnaire. 
-        Dans le cas d'une chaîne, il s'agit du nom du joueur. Selon le rang du joueur dans 
-        l'itérable, sa position est soit (5,1) soit (5,9), et chaque joueur peut initialement
-        placer 10 murs. Dans le cas où l'argument est un dictionnaire, celui-ci doit contenir 
-        une clé 'nom' identifiant le joueur, une clé 'murs' spécifiant le nombre de murs qu'il 
-        peut encore placer, et une clé 'pos' qui spécifie sa position (x, y) actuelle.
-        
-        :param murs: un dictionnaire contenant une clé 'horizontaux' associée à la liste des
-        positions (x, y) des murs horizontaux, et une clé 'verticaux' associée à la liste des
-        positions (x, y) des murs verticaux. Par défaut, il n'y a aucun mur placé sur le jeu.
-
         :raises QuoridorError: si joueurs n'est pas itérable.
         :raises QuoridorError: si l'itérable de joueurs en contient plus de deux.
         :raises QuoridorError: si le nombre de murs qu'un joueur peut placer est >10, ou négatif.
