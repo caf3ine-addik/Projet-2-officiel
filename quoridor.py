@@ -21,8 +21,6 @@ class Quoridor:
                 self.gamestate['murs'] = self.murs
         
 
-    
-        
         """
         :raises QuoridorError: si joueurs n'est pas itérable.
         :raises QuoridorError: si l'itérable de joueurs en contient plus de deux.
@@ -64,9 +62,11 @@ class Quoridor:
         return haut + a + bas
 
     def déplacer_jeton(self, joueur, position):
-        """
-        Pour le joueur spécifié, déplacer son jeton à la position spécifiée.
 
+        self.nouvelle_position = list(position)
+        self.gamestate['joueurs'][joueur - 1]['pos'] = self.nouvelle_position
+
+        """
         :param joueur: un entier spécifiant le numéro du joueur (1 ou 2).
         :param position: le tuple (x, y) de la position du jeton (1<=x<=9 et 1<=y<=9).
         :raises QuoridorError: le numéro du joueur est autre que 1 ou 2.
@@ -79,6 +79,7 @@ class Quoridor:
         return self.gamestate
 
     def jouer_coup(self, joueur):
+
         """
         Pour le joueur spécifié, jouer automatiquement son meilleur coup pour l'état actuel 
         de la partie. Ce coup est soit le déplacement de son jeton, soit le placement d'un 
@@ -90,6 +91,14 @@ class Quoridor:
         """
 
     def partie_terminée(self):
+        
+        if self.gamestate['joueurs'][0]['pos'] == [5, 9]:
+            return self.gamestate['joueurs'][0]["nom"]
+        if self.gamestate['joueurs'][1]['pos'] == [5, 1]:
+            return self.gamestate['joueurs'][1]["nom"]
+        else:
+            return False
+        
         """
         Déterminer si la partie est terminée.
 
@@ -108,10 +117,12 @@ class Quoridor:
         :raises QuoridorError: la position est invalide pour cette orientation.
         :raises QuoridorError: le joueur a déjà placé tous ses murs.
         """
-
 a = Quoridor([{'nom': 'raphael', 'murs': 3, 'pos': [5, 3]},
-              {'nom': 'jean-guy', 'murs': 6, 'pos': [5, 5]}],
+              {'nom': 'jean-guy', 'murs': 6, 'pos': [5, 5]}], {'horizontaux': [(5, 7)], 'verticaux': [(6,3)]}
              )
 
-
+print(a.état_partie())
+a.déplacer_jeton(1, (5,9))
 print(a)
+if a.partie_terminée() != None:
+    print(a.partie_terminée())
