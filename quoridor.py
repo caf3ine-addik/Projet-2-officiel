@@ -84,7 +84,7 @@ class Quoridor:
                 self.gamestate = {'joueurs':
                                 [self.joueur1, self.joueur2],
                                 'murs': {'horizontaux': [], 'verticaux': []}}
-        if type(self.murs) is dict:
+        if type(self.murs) == dict:
                 self.gamestate['murs'] = self.murs
         else:
             raise QuoridorError("L'argument murs n'est pas un dictionnaire")
@@ -93,7 +93,7 @@ class Quoridor:
             if joueurs[i].get('murs')<0 or joueurs[i].get('murs')>10:
                 raise QuoridorError("Nombre de murs qu'un joueur peut placer invalide")
 
-        if hasattr(joueurs, '__iter__') is False:
+        if hasattr(joueurs, '__iter__') == False:
             raise QuoridorError("Argument joueurs n'est pas itérable")
         
         if len(joueurs)>2:
