@@ -1,5 +1,5 @@
 import networkx as nx
-
+from itertools import product
 
 # FONCTION FOURNIE
 def construire_graphe(joueurs, murs_horizontaux, murs_verticaux):
@@ -84,20 +84,35 @@ class Quoridor:
                 self.gamestate = {'joueurs':
                                 [self.joueur1, self.joueur2],
                                 'murs': {'horizontaux': [], 'verticaux': []}}
-        if type(self.murs) == dict:
+        if type(self.murs) is dict:
                 self.gamestate['murs'] = self.murs
+        else:
+            raise QuoridorError("L'argument murs n'est pas un dictionnaire")
         
+        for i in range(2):
+            if joueurs[i].get('murs')<0 or joueurs[i].get('murs')>10:
+                raise QuoridorError("Nombre de murs qu'un joueur peut placer invalide")
 
-        """
-        :raises QuoridorError: si joueurs n'est pas itérable.
-        :raises QuoridorError: si l'itérable de joueurs en contient plus de deux.
-        :raises QuoridorError: si le nombre de murs qu'un joueur peut placer est >10, ou négatif.
-        :raises QuoridorError: si la position d'un joueur est invalide.
-        :raises QuoridorError: si murs n'est pas un dictionnaire lorsque présent.
-        :raises QuoridorError: si le total des murs placés et plaçables n'est pas égal à 20.
-        :raises QuoridorError: si la position d'un mur est invalide.
-        """
+        if hasattr(joueurs, '__iter__') is False:
+            raise QuoridorError("Argument joueurs n'est pas itérable")
         
+        if len(joueurs)>2:
+            raise QuoridorError("Plus de deux joueurs")
+        
+        for i in range(2):
+            if joueurs[i].get('pos') not in list(product(range(1,10), repeat=2)):
+                raise QuoridorError("Position du joueur invalide")
+        
+        for i in murs['verticaux']:
+            if i not in list(product(range(1,10), repeat=2)):
+                raise QuoridorError("Position mur vertical invalide")
+        
+        for i in murs['horizontaux']:
+            if i not in list(product(range(1,10), repeat=2)):
+                raise QuoridorError("Position mur horizontal invalide")
+
+        if joueurs[0].get('murs') + joueurs[1].get('murs') + len(murs['horizontaux']) + len(murs['verticaux']) != 20:
+            raise QuoridorError("Le total des murs placés et plaçables n'est pas égal à 20")      
 
     def __str__(self):
         
