@@ -1,6 +1,10 @@
 import networkx as nx
 from itertools import product
 
+
+class QuoridorError(Exception):
+    pass
+
 # FONCTION FOURNIE
 def construire_graphe(joueurs, murs_horizontaux, murs_verticaux):
     """
