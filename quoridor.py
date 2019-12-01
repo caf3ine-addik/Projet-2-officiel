@@ -220,11 +220,11 @@ class Quoridor:
 
     def placer_mur(self, joueur: int, position: tuple, orientation: str):
 
-        for i in murs['verticaux']:
+        for i in self.gamestate['joueurs'][joueur-1]['murs']['verticaux']:
             if i not in list(product(range(1,10), repeat=2)):
                 raise QuoridorError("Position mur vertical invalide")
         
-        for i in murs['horizontaux']:
+        for i in self.gamestate['joueurs'][joueur-1]['murs']['horizontaux']:
             if i not in list(product(range(1,10), repeat=2)):
                 raise QuoridorError("Position mur horizontal invalide")
 
