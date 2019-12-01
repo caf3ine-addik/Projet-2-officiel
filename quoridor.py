@@ -237,6 +237,9 @@ class Quoridor:
         if self.gamestate['joueurs'][joueur-1]['murs'] == 0:
             raise QuoridorError('le joueur a déjà placé tous ses murs')
         
+        if position in self.gamestate['murs']['horizontaux'] or position in self.gamestate['murs']['verticaux'] :
+            raise QuoridorError('un mur occupe déjà cette position')
+
         self.gamestate['joueurs'][joueur-1]['murs'] = self.gamestate['joueurs'][joueur-1]['murs']-1
         if orientation == 'horizontal':
             self.gamestate['murs']['horizontaux'].append(position)
