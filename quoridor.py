@@ -1,5 +1,6 @@
 import networkx as nx
 from itertools import product
+import random
 
 
 class QuoridorError(Exception):
@@ -188,23 +189,47 @@ class Quoridor:
     def jouer_coup(self, joueur):  
 
 
-        if self.partie_terminée() != False:
-            raise QuoridorError('La partie est déjà terminée')
-
-        if joueur != 1:
-            if  joueur != 2:
-                raise QuoridorError('le numéro du joueur doit être 1 ou 2')
-
         graphe = construire_graphe(
         [joueur['pos'] for joueur in self.gamestate['joueurs']], 
         self.gamestate['murs']['horizontaux'],
         self.gamestate['murs']['verticaux'])
 
-        position_a_aller = nx.shortest_path(
+        
+        position_a_aller_j1 = nx.shortest_path(
             graphe,
-            tuple(self.gamestate['joueurs'][joueur - 1]['pos']), f'B{joueur}')
+            tuple(self.gamestate['joueurs'][0]['pos']), 'B1')
+        
+        position_a_aller_j2 = nx.shortest_path(
+            graphe,
+            tuple(self.gamestate['joueurs'][1]['pos']), 'B2')
 
-        self.déplacer_jeton(joueur, position_a_aller[1])
+        if joueur == 1:    
+            if len(position_a_aller_j1) <= len(position_a_aller_j2):
+                self.déplacer_jeton(joueur, position_a_aller_j1[1])
+            
+            else:
+                try:
+                    x = random.randint(1, 9)
+                    y = random.randint(1, 9)
+                    orientation = random.choice(['horizontal', 'vertical'])
+                    self.placer_mur(1, (x, y), orientation)
+                    self.gamestate['joueurs'][0]['murs'] -= 1
+                except QuoridorError:
+                    self.jouer_coup(1)
+        
+        if joueur == 2:
+            if len(position_a_aller_j1) >= len(position_a_aller_j2):
+                self.déplacer_jeton(joueur, position_a_aller_j2[1])
+            
+            else:
+                try:
+                    x = random.randint(1, 9)
+                    y = random.randint(1, 9)
+                    orientation = random.choice(['horizontal', 'vertical'])
+                    self.placer_mur(1, (x, y), orientation)
+                    self.gamestate['joueurs'][1]['murs'] -= 1
+                except QuoridorError:
+                    self.jouer_coup(2)        
 
         """
         Pour le joueur spécifié, jouer automatiquement son meilleur coup pour l'état actuel 
@@ -215,12 +240,12 @@ class Quoridor:
         :raises QuoridorError: le numéro du joueur est autre que 1 ou 2.
         :raises QuoridorError: la partie est déjà terminée.
         """
-
+    
     def partie_terminée(self):
         
-        if self.gamestate['joueurs'][0]['pos'] == [5, 9]:
+        if self.gamestate['joueurs'][0]['pos'][1] == 9:
             return self.gamestate['joueurs'][0]["nom"]
-        if self.gamestate['joueurs'][1]['pos'] == [5, 1]:
+        if self.gamestate['joueurs'][1]['pos'][1] == 1:
             return self.gamestate['joueurs'][1]["nom"]
         else:
             return False
@@ -276,23 +301,29 @@ class Quoridor:
         :raises QuoridorError: la position est invalide pour cette orientation.
         :raises QuoridorError: le joueur a déjà placé tous ses murs.
         """
-a = Quoridor([{'nom': 'raoh', 'murs': 10, 'pos': (5, 1)},
+a = Quoridor([{'nom': 'raoh', 'murs': 8, 'pos': (5, 1)},
               {'nom': 'pl', 'murs': 10, 'pos': (5, 9)}], 
-              {"horizontaux": [], 
+              {"horizontaux": [(5,2), (6,2)], 
         "verticaux": []})
+
+print(a)
+print(a.état_partie())
+
 
 a = Quoridor(['Raph', 'PL'])
 print(a)
-while True:
-    print("C'est le coup de Raph")
+while a.partie_terminée() == False:
+    print("""C'est le coup de Raphael """)
     a.jouer_coup(1)
     print(a)
     if a.partie_terminée() != False:
+        print ('LE GAGANT EST: ')
         print(a.partie_terminée())
         break
-    print("C'est le coup de PL")
+    print("""C'est le coup de PL """)
     a.jouer_coup(2)
     print(a)
     if a.partie_terminée() != False:
+        print ('LE GAGANT EST: ')
         print(a.partie_terminée())
         break
