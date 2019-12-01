@@ -219,24 +219,14 @@ class Quoridor:
         """
 
     def placer_mur(self, joueur: int, position: tuple, orientation: str):
-
-        for i in self.gamestate['joueurs'][joueur-1]['murs']['verticaux']:
-            if i not in list(product(range(1,10), repeat=2)):
-                raise QuoridorError("Position mur vertical invalide")
         
-        for i in self.gamestate['joueurs'][joueur-1]['murs']['horizontaux']:
-            if i not in list(product(range(1,10), repeat=2)):
-                raise QuoridorError("Position mur horizontal invalide")
-
-
         if joueur != 1:
             if joueur != 2:
                 raise QuoridorError('le numéro du joueur doit être 1 ou 2')
-
-        
+  
         if self.gamestate['joueurs'][joueur-1]['murs'] == 0:
             raise QuoridorError('le joueur a déjà placé tous ses murs')
-        
+
         if position in self.gamestate['murs']['horizontaux'] or position in self.gamestate['murs']['verticaux'] :
             raise QuoridorError('un mur occupe déjà cette position')
 
@@ -245,6 +235,17 @@ class Quoridor:
             self.gamestate['murs']['horizontaux'].append(position)
         if orientation == 'vertical':
             self.gamestate['murs']['verticaux'].append(position)
+            
+        for i in self.gamestate['murs']['verticaux']:
+            if i not in list(product(range(1,10), repeat=2)):
+                self.gamestate['murs']['verticaux'].pop()
+                raise QuoridorError("Position mur vertical invalide")
+        
+        for i in self.gamestate['murs']['horizontaux']:
+            if i not in list(product(range(1,10), repeat=2)):
+                self.gamestate['murs']['horizontaux'].pop()
+                raise QuoridorError("Position mur horizontal invalide")
+
         """
         Pour le joueur spécifié, placer un mur à la position spécifiée.
 
