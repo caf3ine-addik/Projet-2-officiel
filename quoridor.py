@@ -88,14 +88,41 @@ class Quoridor:
                 self.gamestate = {'joueurs':
                                 [self.joueur1, self.joueur2],
                                 'murs': {'horizontaux': [], 'verticaux': []}}
-        if type(self.murs) == dict:
-                self.gamestate['murs'] = self.murs
-        else:
-            raise QuoridorError("L'argument murs n'est pas un dictionnaire")
         
-        for i in range(2):
-            if joueurs[i].get('murs')<0 or joueurs[i].get('murs')>10:
-                raise QuoridorError("Nombre de murs qu'un joueur peut placer invalide")
+        if type(self.murs) == dict:
+            self.gamestate['murs'] = self.murs
+
+            for i in murs['verticaux']:
+                if 2 > i[0] or i[1] > 8:
+                    raise QuoridorError("Position mur vertical invalide")
+                if i not in list(product(range(1,10), repeat=2)):
+                    raise QuoridorError("Position mur vertical invalide")
+        
+            for i in murs['horizontaux']:
+                if i[0] > 8 or 2 > i[1]:
+                    raise QuoridorError("Position mur horizontal invalide")
+                if i not in list(product(range(1,10), repeat=2)):
+                        raise QuoridorError("Position mur horizontal invalide")
+
+            if joueurs[0].get('murs') + joueurs[1].get('murs') + len(murs['horizontaux']) + len(murs['verticaux']) != 20:
+                raise QuoridorError("Le total des murs placés et plaçables n'est pas égal à 20")
+
+        else:
+            if self.murs != None:
+                raise QuoridorError("L'argument murs n'est pas un dictionnaire")
+
+        if isinstance(joueurs[0], dict):
+            for i in range(2):
+                if joueurs[i]['murs'] < 0 or joueurs[i]['murs'] > 10:
+                    raise QuoridorError("Nombre de murs qu'un joueur peut placer invalide")
+            
+            for i in range(2):
+                if joueurs[i]['pos'] not in list(product(range(1,10), repeat=2)):
+                    raise QuoridorError("Position du joueur invalide")
+            
+            if murs == None:
+                if joueurs[0]['murs'] + joueurs[1]['murs'] != 20:
+                    raise QuoridorError("Le total des murs placés et plaçables n'est pas égal à 20")
 
         if hasattr(joueurs, '__iter__') == False:
             raise QuoridorError("Argument joueurs n'est pas itérable")
@@ -103,21 +130,7 @@ class Quoridor:
         if len(joueurs)>2:
             raise QuoridorError("Plus de deux joueurs")
         
-        for i in range(2):
-            if joueurs[i].get('pos') not in list(product(range(1,10), repeat=2)):
-                raise QuoridorError("Position du joueur invalide")
         
-        for i in murs['verticaux']:
-            if i not in list(product(range(1,10), repeat=2)):
-                raise QuoridorError("Position mur vertical invalide")
-        
-        for i in murs['horizontaux']:
-            if i not in list(product(range(1,10), repeat=2)):
-                raise QuoridorError("Position mur horizontal invalide")
-
-        if joueurs[0].get('murs') + joueurs[1].get('murs') + len(murs['horizontaux']) + len(murs['verticaux']) != 20:
-            raise QuoridorError("Le total des murs placés et plaçables n'est pas égal à 20")      
-
     def __str__(self):
         
         haut = f'Légende: 1={self.gamestate["joueurs"][0]["nom"]}, 2={self.gamestate["joueurs"][1]["nom"]}\n'
@@ -237,11 +250,17 @@ class Quoridor:
             self.gamestate['murs']['verticaux'].append(position)
             
         for i in self.gamestate['murs']['verticaux']:
+            if 2 > i[0] or i[1] > 8:
+                self.gamestate['murs']['verticaux'].pop()
+                raise QuoridorError("Position mur vertical invalide")
             if i not in list(product(range(1,10), repeat=2)):
                 self.gamestate['murs']['verticaux'].pop()
                 raise QuoridorError("Position mur vertical invalide")
         
         for i in self.gamestate['murs']['horizontaux']:
+            if i[0] > 8 or 2 > i[1]:
+                self.gamestate['murs']['horizontaux'].pop()
+                raise QuoridorError("Position mur horizontal invalide")
             if i not in list(product(range(1,10), repeat=2)):
                 self.gamestate['murs']['horizontaux'].pop()
                 raise QuoridorError("Position mur horizontal invalide")
@@ -257,18 +276,23 @@ class Quoridor:
         :raises QuoridorError: la position est invalide pour cette orientation.
         :raises QuoridorError: le joueur a déjà placé tous ses murs.
         """
-a = Quoridor([{'nom': 'raphael', 'murs': 3, 'pos': [5, 1]},
-              {'nom': 'jean-guy', 'murs': 6, 'pos': [5, 9]}], {'horizontaux': [], 'verticaux': []}
-             )
+a = Quoridor([{'nom': 'raoh', 'murs': 10, 'pos': (5, 1)},
+              {'nom': 'pl', 'murs': 10, 'pos': (5, 9)}], 
+              {"horizontaux": [], 
+        "verticaux": []})
 
-
-
-
-
-print(a.état_partie())
-a.jouer_coup(2)
-print(a.état_partie())
-
+a = Quoridor(['Raph', 'PL'])
 print(a)
-if a.partie_terminée() != False:
-    print(a.partie_terminée())
+while True:
+    print("C'est le coup de Raph")
+    a.jouer_coup(1)
+    print(a)
+    if a.partie_terminée() != False:
+        print(a.partie_terminée())
+        break
+    print("C'est le coup de PL")
+    a.jouer_coup(2)
+    print(a)
+    if a.partie_terminée() != False:
+        print(a.partie_terminée())
+        break
