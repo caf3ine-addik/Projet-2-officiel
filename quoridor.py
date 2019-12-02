@@ -4,8 +4,8 @@ from itertools import product
 import networkx as nx
 
 
-'''Classe QuoridorError'''
 class QuoridorError(Exception):
+    '''Classe QuoridorError'''
     pass
 
 # FONCTION FOURNIE
@@ -75,22 +75,22 @@ def construire_graphe(joueurs, murs_horizontaux, murs_verticaux):
 
     return graphe
 # FIN DE LA FONCTION FOURNIE
-'''Classe Quoridor'''
-class Quoridor:
 
+class Quoridor:
+    '''Classe Quoridor'''
     def __init__(self, joueurs, murs=None):
         self.joueur1 = joueurs[0]
         self.joueur2 = joueurs[1]
         self.murs = murs
         if str(self.joueur1) == self.joueur1:
             self.gamestate = {'joueurs':
-                             [{'nom': self.joueur1, 'murs': 10, 'pos': [5, 1]},
+                            [{'nom': self.joueur1, 'murs': 10, 'pos': [5, 1]},
                              {'nom': self.joueur2, 'murs': 10, 'pos': [5, 9]}],
-                              'murs': {'horizontaux': [], 'verticaux': []}}
+                             'murs': {'horizontaux': [], 'verticaux': []}}
         else:
             self.gamestate = {'joueurs':
-                             [self.joueur1, self.joueur2],
-                              'murs': {'horizontaux': [], 'verticaux': []}}
+                            [self.joueur1, self.joueur2],
+                             'murs': {'horizontaux': [], 'verticaux': []}}
 
         if isinstance(self.murs, dict):
             self.gamestate['murs'] = self.murs
@@ -149,7 +149,7 @@ class Quoridor:
             if i%2 == 0:
                 liste_vide.append(style_damier_1)
             else:
-                liste_vide.append(style_damier_2) 
+                liste_vide.append(style_damier_2)
         for i in range(2):
             x = 18-2*self.gamestate["joueurs"][i]["pos"][1]
             y = 4*self.gamestate["joueurs"][i]["pos"][0]
@@ -170,9 +170,9 @@ class Quoridor:
         milieu = ''.join(damier)
 
         return haut + milieu + bas
-    '''Permet de déplacer le jeton'''
+    
     def déplacer_jeton(self, joueur, position):
-
+        '''Permet de déplacer le jeton'''
         if joueur != 1:
             if joueur != 2:
                 raise QuoridorError('le numéro du joueur doit être 1 ou 2')
@@ -180,15 +180,15 @@ class Quoridor:
         if position[0] > 9 or position[0] < 1 or position[1] > 9 or position[1] < 1:
             raise QuoridorError('la position est invalide (en dehors du damier)')
 
-        self.nouvelle_position = list(position)
-        self.gamestate['joueurs'][joueur - 1]['pos'] = self.nouvelle_position
+        nouvelle_position = list(position)
+        self.gamestate['joueurs'][joueur - 1]['pos'] = nouvelle_position
 
-    '''Retourne l'état de la partie'''
     def état_partie(self):
+        '''Retourne l'état de la partie'''
         return self.gamestate
 
-    '''Permet de jouer automatiquement le coup'''
     def jouer_coup(self, joueur):
+        '''Permet de jouer automatiquement le coup'''
 
         graphe = construire_graphe(
             [joueur['pos'] for joueur in self.gamestate['joueurs']],
@@ -237,18 +237,16 @@ class Quoridor:
                 except QuoridorError:
                     self.jouer_coup(2)
 
-    '''Permet de savoir si la partie est terminée'''
     def partie_terminée(self):
-
+        '''Permet de savoir si la partie est terminée'''
         if self.gamestate['joueurs'][0]['pos'][1] == 9:
             return self.gamestate['joueurs'][0]["nom"]
         if self.gamestate['joueurs'][1]['pos'][1] == 1:
             return self.gamestate['joueurs'][1]["nom"]
         return False
 
-    '''Permet de placer un mur sur le damier'''
     def placer_mur(self, joueur: int, position: tuple, orientation: str):
-
+        '''Permet de placer un mur sur le damier'''
         if joueur != 1:
             if joueur != 2:
                 raise QuoridorError('le numéro du joueur doit être 1 ou 2')
@@ -285,7 +283,7 @@ class Quoridor:
 
 a = Quoridor([{'nom': 'raoh', 'murs': 10, 'pos': (5, 1)},
               {'nom': 'pl', 'murs': 10, 'pos': (5, 9)}],
-              {"horizontaux": [],
+             {"horizontaux": [],
                "verticaux": []})
 
 
