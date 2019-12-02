@@ -279,28 +279,3 @@ class Quoridor:
             if i not in list(product(range(1, 10), repeat=2)):
                 self.gamestate['murs']['horizontaux'].pop()
                 raise QuoridorError("Position mur horizontal invalide")
-
-a = Quoridor([{'nom': 'raoh', 'murs': 10, 'pos': (5, 1)},
-              {'nom': 'pl', 'murs': 10, 'pos': (5, 9)}],
-             {"horizontaux": [],
-              "verticaux": []})
-
-
-
-a = Quoridor(['Raph', 'PL'])
-print(a)
-while not a.partie_terminée():
-    print("""C'est le coup de Raphael """)
-    a.jouer_coup(1)
-    print(a)
-    if a.partie_terminée():
-        print('LE GAGANT EST: ')
-        print(a.partie_terminée())
-        break
-    print("""C'est le coup de PL """)
-    a.jouer_coup(2)
-    print(a)
-    if a.partie_terminée():
-        print('LE GAGANT EST: ')
-        print(a.partie_terminée())
-        break
