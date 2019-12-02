@@ -6,7 +6,6 @@ import networkx as nx
 
 class QuoridorError(Exception):
     '''Classe QuoridorError'''
-    pass
 
 # FONCTION FOURNIE
 def construire_graphe(joueurs, murs_horizontaux, murs_verticaux):
@@ -86,11 +85,11 @@ class Quoridor:
             self.gamestate = {'joueurs':
                             [{'nom': self.joueur1, 'murs': 10, 'pos': [5, 1]},
                              {'nom': self.joueur2, 'murs': 10, 'pos': [5, 9]}],
-                             'murs': {'horizontaux': [], 'verticaux': []}}
+                              'murs': {'horizontaux': [], 'verticaux': []}}
         else:
             self.gamestate = {'joueurs':
                             [self.joueur1, self.joueur2],
-                             'murs': {'horizontaux': [], 'verticaux': []}}
+                              'murs': {'horizontaux': [], 'verticaux': []}}
 
         if isinstance(self.murs, dict):
             self.gamestate['murs'] = self.murs
@@ -170,7 +169,7 @@ class Quoridor:
         milieu = ''.join(damier)
 
         return haut + milieu + bas
-    
+
     def déplacer_jeton(self, joueur, position):
         '''Permet de déplacer le jeton'''
         if joueur != 1:
@@ -284,7 +283,7 @@ class Quoridor:
 a = Quoridor([{'nom': 'raoh', 'murs': 10, 'pos': (5, 1)},
               {'nom': 'pl', 'murs': 10, 'pos': (5, 9)}],
              {"horizontaux": [],
-               "verticaux": []})
+              "verticaux": []})
 
 
 
